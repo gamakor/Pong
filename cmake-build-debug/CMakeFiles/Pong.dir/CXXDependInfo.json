@@ -1,0 +1,22 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"dir-cur-bld" : "/home/gamakor/CLionProjects/Pong/cmake-build-debug",
+	"dir-cur-src" : "/home/gamakor/CLionProjects/Pong",
+	"dir-top-bld" : "/home/gamakor/CLionProjects/Pong/cmake-build-debug",
+	"dir-top-src" : "/home/gamakor/CLionProjects/Pong",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"_deps/raylib-src/src",
+		"_deps/raylib-src/src/external/glfw/include"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/home/gamakor/CLionProjects/Pong/cmake-build-debug/CMakeFiles/Pong.dir"
+}
