@@ -11,6 +11,9 @@ struct Ball {
     {
         DrawCircle(position.x, position.y, radius, WHITE);
     }
+    void ChangeDir() {
+         speed_x *= -1;
+    }
 };
 
 struct Paddle {
@@ -45,20 +48,27 @@ int main()
 
     //create left panel
     Paddle leftPaddle;
-    leftPaddle.position.x = 50;
-    leftPaddle.position.y =GetScreenHeight()/2;
     leftPaddle.width = 50;
     leftPaddle.height = 100;
-    leftPaddle.speed = 300.f;
+    leftPaddle.position.x = 25;;
+    leftPaddle.position.y =GetScreenHeight()/2;
+    leftPaddle.speed = 400.f;
 
     Paddle rightPaddle;
     rightPaddle.height = 100;
     rightPaddle.width = 50;
-    rightPaddle.position.x = GetScreenWidth() - rightPaddle.width;
+    rightPaddle.position.x = GetScreenWidth()+12 ;
     rightPaddle.position.y = GetScreenHeight()/2;
-    rightPaddle.speed = 300.f;
+    rightPaddle.speed = 400.f;
+
+    int rightPaddleScore = 0;
+    int leftPaddleScore = 0;
+
 
     const char* winnerText = nullptr;
+    char leftPaddleScoreText[10] = "0";
+    char rightPaddleScoreText[10] = "0";
+
 
 
 
@@ -79,17 +89,26 @@ int main()
 
 
         if (IsKeyDown(KEY_W)) {
-            leftPaddle.position.y -= leftPaddle.speed * GetFrameTime();
+            if (leftPaddle.position.y > leftPaddle.height/2)
+            {
+                leftPaddle.position.y -= leftPaddle.speed * GetFrameTime();
+            }
         }
         if (IsKeyDown(KEY_S)) {
-            leftPaddle.position.y += leftPaddle.speed * GetFrameTime();
+            if (leftPaddle.position.y < GetScreenHeight() - leftPaddle.height/2) {
+                leftPaddle.position.y += leftPaddle.speed * GetFrameTime();
+            }
         }
 
         if (IsKeyDown(KEY_UP)) {
-            rightPaddle.position.y -= rightPaddle.speed * GetFrameTime();
+            if (rightPaddle.position.y > rightPaddle.height/2) {
+                rightPaddle.position.y -= rightPaddle.speed * GetFrameTime();
+            }
         }
         if (IsKeyDown(KEY_DOWN )) {
-            rightPaddle.position.y += rightPaddle.speed * GetFrameTime();
+            if (rightPaddle.position.y < GetScreenHeight() - rightPaddle.height/2) {
+                rightPaddle.position.y += rightPaddle.speed * GetFrameTime();
+            }
         }
 
 
@@ -106,12 +125,38 @@ int main()
             }
         }
 
-        if (ball.position.x > GetScreenWidth()) {
-            winnerText = "Player 1 Wins!";
-        }
+        if (ball.position.x > GetScreenWidth() && winnerText == nullptr) {
+            leftPaddleScore++;
 
-        if (ball.position.x < 0) {
-            winnerText = "Player 2 Wins!";
+            sprintf(leftPaddleScoreText, "%i", leftPaddleScore);
+
+            if (leftPaddleScore == 3 ) {
+                winnerText = "Player 1 Wins!";
+            }
+            if (!winnerText) {
+                ball.position.x = GetScreenWidth()/2;
+                ball.position.y = GetScreenHeight()/2;
+                ball.speed_x = 3.0f;
+                ball.speed_y = 3.0f;
+           }
+
+        }
+        //score for right pannel
+        if (ball.position.x < 0 && winnerText == nullptr) {
+            rightPaddleScore++;
+            sprintf(rightPaddleScoreText, "%i", rightPaddleScore);
+            if (rightPaddleScore == 3) {
+                winnerText = "Player 2 Wins!";
+            }
+            if (!winnerText) {
+                ball.position.x = GetScreenWidth()/2;
+                ball.position.y = GetScreenHeight()/2;
+                ball.speed_x = 3.0f;
+                ball.speed_y = 3.0f;
+                ball.ChangeDir();
+            }
+
+
         }
 
 
@@ -121,6 +166,8 @@ int main()
         ball.Draw();
         leftPaddle.Draw();
         rightPaddle.Draw();
+        DrawText(leftPaddleScoreText, 10, 10, 20, WHITE);
+        DrawText(rightPaddleScoreText, GetScreenWidth() - 20, 10, 20, WHITE);
 
         if (winnerText) {
 
@@ -132,14 +179,21 @@ int main()
             ball.position.x = GetScreenWidth()/2;
             ball.position.y = GetScreenHeight()/2;
             ball.speed_x = 3.0f;
+            if (winnerText == "Player 2 Wins!") {
+                ball.ChangeDir();
+            }
             ball.speed_y = 3.0f;
+            leftPaddleScore = 0;
+            rightPaddleScore = 0;
+            sprintf(leftPaddleScoreText, "%i", leftPaddleScore);
+            sprintf(rightPaddleScoreText, "%i", rightPaddleScore);
             winnerText = nullptr;
         }
 
         //DrawRectangle(0,GetScreenHeight()/2,50,100,BLACK);
        // DrawRectangle(GetScreenWidth()-50,GetScreenHeight()/2,50,100,BLACK);
 
-       DrawFPS(10,10);
+     //  DrawFPS(10,10);
         EndDrawing();
 
 
